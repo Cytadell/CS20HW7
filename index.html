@@ -61,7 +61,7 @@
                 method: 'GET',
                 headers: {
                     'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
-                    'x-rapidapi-key': '711c3d7ad8msh18dfac105290cedp183340jsn10d90d2078b' // Replace with your API key
+                    'x-rapidapi-key': '711c3d7ad8msh18dfac105290cedp183340jsn10d90d2078bc'
                 }
             };
 
@@ -82,7 +82,7 @@
 
         function displayResults(synonyms) {
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = ''; // Clear previous results
+            resultsDiv.innerHTML = '';
 
             if (synonyms && synonyms.length > 0) {
                 resultsDiv.innerHTML = `<h2>Synonyms for "${document.getElementById('wordInput').value}":</h2>`;

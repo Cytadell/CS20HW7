@@ -6,7 +6,6 @@
     <title>Synonyms Finder</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 20px;
             padding: 20px;
             background-color: #f4f4f4;
@@ -51,7 +50,7 @@
             if (word) {
                 fetchSynonyms(word);
             } else {
-                alert('Please enter a word.');
+                alert('Invalid Input');
             }
         });
 
@@ -73,29 +72,25 @@
                     return response.json();
                 })
                 .then(data => {
-                    displayResults(data.synonyms);
+                        const resultsDiv = document.getElementById('results');
+                        resultsDiv.innerHTML = '';
+
+                        if (data.synonyms && data.synonyms.length > 0) {
+                                resultsDiv.innerHTML = `<h2>Synonyms for "${document.getElementById('wordInput').value}":</h2>`;
+                                const list = document.createElement('ul');
+                                data.synonyms.forEach(synonym => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = synonym;
+                                list.appendChild(listItem);
+                                });
+                                resultsDiv.appendChild(list);
+                        } else {
+                                resultsDiv.innerHTML = `<p>No synonyms found for "${document.getElementById('wordInput').value}".</p>`;
+                        }
                 })
                 .catch(error => {
                     document.getElementById('results').innerHTML = 'Error: ' + error.message;
                 });
-        }
-
-        function displayResults(synonyms) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-
-            if (synonyms && synonyms.length > 0) {
-                resultsDiv.innerHTML = `<h2>Synonyms for "${document.getElementById('wordInput').value}":</h2>`;
-                const list = document.createElement('ul');
-                synonyms.forEach(synonym => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = synonym;
-                    list.appendChild(listItem);
-                });
-                resultsDiv.appendChild(list);
-            } else {
-                resultsDiv.innerHTML = `<p>No synonyms found for "${document.getElementById('wordInput').value}".</p>`;
-            }
         }
     </script>
 </body>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synonyms Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Synonyms Finder</h1>
+    <input type="text" id="wordInput" placeholder="Enter a word" />
+    <button id="findSynonyms">Find Synonyms</button>
+    
+    <div id="results" class="results"></div>
+
+    <script>
+        document.getElementById('findSynonyms').addEventListener('click', function() {
+            const word = document.getElementById('wordInput').value;
+            if (word) {
+                fetchSynonyms(word);
+            } else {
+                alert('Please enter a word.');
+            }
+        });
+
+        function fetchSynonyms(word) {
+            const url = `https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
+                    'x-rapidapi-key': '711c3d7ad8msh18dfac105290cedp183340jsn10d90d2078b' // Replace with your API key
+                }
+            };
+
+            fetch(url, options)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayResults(data.synonyms);
+                })
+                .catch(error => {
+                    document.getElementById('results').innerHTML = 'Error: ' + error.message;
+                });
+        }
+
+        function displayResults(synonyms) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Clear previous results
+
+            if (synonyms && synonyms.length > 0) {
+                resultsDiv.innerHTML = `<h2>Synonyms for "${document.getElementById('wordInput').value}":</h2>`;
+                const list = document.createElement('ul');
+                synonyms.forEach(synonym => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = synonym;
+                    list.appendChild(listItem);
+                });
+                resultsDiv.appendChild(list);
+            } else {
+                resultsDiv.innerHTML = `<p>No synonyms found for "${document.getElementById('wordInput').value}".</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
